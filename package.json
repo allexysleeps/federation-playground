@@ -1,0 +1,27 @@
+{
+  "name": "federation-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:product": "nodemon product/src",
+    "dev:price": "nodemon price/src",
+    "dev:category": "nodemon category/src",
+    "dev:services": "yarn dev:product & yarn dev:price & yarn dev:category",
+    "dev:root": "nodemon --watch root root/src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/federation": "^0.7.0",
+    "@apollo/gateway": "^0.7.1",
+    "apollo-server": "^2.7.0",
+    "dataloader": "^1.4.0",
+    "graphql": "^14.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
