@@ -17,6 +17,10 @@ const typeDefs = gql`
         parentCategory: [Category],
         subCategory: [Category]
     }
+  type ProductTypes @key(fields: "typeValues")  @key(fields: "parentCategoriesIds") {
+      parentCategoriesIds: [String]!,
+      typeValues: [String]
+  }
 `
 
 const resolvers = {
@@ -31,6 +35,15 @@ const resolvers = {
     },
     __resolveReference(obj) {
       return categoryLoader.load(obj.id)
+    }
+  },
+  ProductTypes: {
+    __resolveReference(obj) {
+      console.log(obj)
+      return {
+        parentCategoriesIds: ['1', '2'],
+        typeValues: ['a', 'b']
+      }
     }
   },
   Query: {

@@ -1,18 +1,20 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { buildFederatedSchema } = require('@apollo/federation')
 
-const { getProductById, getProducts } = require('./calls')
+const { getProducts } = require('./calls')
 
 const typeDefs = gql`
     extend type Query {
-        product(id: String!): Product
-        products: [Product]
+        searchProducts: [Product]
     }
     type Product {
         id: ID!
         name: String
         price: ProductPrice @provides(fields: "id")
         parentCategory: [Category!]! @provides(fields: "id")
+    }
+    type Test {
+        id: String
     }
     extend type ProductPrice @key (fields: "id") {
         id: String! @external
@@ -24,10 +26,7 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    product(_, args) {
-      return getProductById(args.id)
-    },
-    products() {
+    searchProducts() {
       return getProducts()
     }
   },
@@ -38,14 +37,6 @@ const resolvers = {
     parentCategory({ parentCategory }) {
       return parentCategory
         .map((id) => ({ __typename: 'Category', id }))
-    },
-    types(obj) {
-      console.log(obj)
-      return {
-        __typename: 'ProductTypes',
-        parentCategoriesIds: ['0', '1'],
-        values: ['a', 'b']
-      }
     }
   }
 }
@@ -55,6 +46,6 @@ const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }])
 })
 
-server.listen(3001).then(({ url }) => {
+server.listen(3004).then(({ url }) => {
   console.log(`Product MS is running on ${url}`)
 })

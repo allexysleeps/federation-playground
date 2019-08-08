@@ -8,16 +8,17 @@
     "dev:product": "nodemon product/src",
     "dev:price": "nodemon price/src",
     "dev:category": "nodemon category/src",
-    "dev:services": "yarn dev:product & yarn dev:price & yarn dev:category",
+    "dev:search": "nodemon search/src",
+    "dev:services": "npm run dev:product & npm run dev:price & npm run dev:category",
     "dev:root": "nodemon --watch root root/src"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@apollo/federation": "^0.7.0",
-    "@apollo/gateway": "^0.7.1",
-    "apollo-server": "^2.7.0",
+    "@apollo/federation": "^0.8.0",
+    "@apollo/gateway": "^0.8.1",
+    "apollo-server": "^2.8.1",
     "dataloader": "^1.4.0",
     "graphql": "^14.4.2"
   },
