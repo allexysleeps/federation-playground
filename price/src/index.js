@@ -7,23 +7,27 @@ const { priceBatcher } = require('./batcher')
 const priceLoader = new DataLoader(priceBatcher)
 
 const typeDefs = gql`
-    type Price {
-        id: String!
+    type ProductPrice @key(fields: "id type") {
+        id: String!,
+        type: ProductType
         incVat: Int
         exVat: Int
     }
-    type ProductPrice @key(fields: "id") {
-        id: String!,
-        price: Price
+
+    enum ProductType {
+        BASE
+        PROMOTIONAL
     }
 `
 
 const resolvers = {
   ProductPrice: {
-    __resolveReference({ id }) {
+    __resolveReference: async ({ id, type }) => {
+      const price = await priceLoader.load(id)
       return {
         id,
-        price: priceLoader.load(id)
+        type,
+        ...price,
       }
     }
   }

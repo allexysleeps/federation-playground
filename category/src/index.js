@@ -11,16 +11,12 @@ const typeDefs = gql`
     extend type Query {
         category(id: String!): Category
     }
-    type Category @key (fields: "id") {
-        id: String!
+    type Category @key (fields: "code") {
+        code: String!
         name: String,
         parentCategory: [Category],
-        subCategory: [Category]
+        subCategory: [Category],
     }
-  type ProductTypes @key(fields: "typeValues")  @key(fields: "parentCategoriesIds") {
-      parentCategoriesIds: [String]!,
-      typeValues: [String]
-  }
 `
 
 const resolvers = {
@@ -35,15 +31,6 @@ const resolvers = {
     },
     __resolveReference(obj) {
       return categoryLoader.load(obj.id)
-    }
-  },
-  ProductTypes: {
-    __resolveReference(obj) {
-      console.log(obj)
-      return {
-        parentCategoriesIds: ['1', '2'],
-        typeValues: ['a', 'b']
-      }
     }
   },
   Query: {

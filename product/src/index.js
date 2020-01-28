@@ -9,46 +9,35 @@ const typeDefs = gql`
         products: [Product]
     }
     type Product {
-        id: ID!
+        id: String!
         name: String
-        price: ProductPrice @provides(fields: "id")
-        parentCategory: [Category!]! @provides(fields: "id")
+        price(type: ProductType): ProductPrice @provides(fields: "id type")
     }
-    extend type ProductPrice @key (fields: "id") {
+    extend type ProductPrice @key (fields: "id type") {
         id: String! @external
+        type: ProductType @external
     }
-    extend type Category @key (fields: "id") {
-        id: String! @external
+    enum ProductType {
+        BASE
+        PROMOTIONAL
     }
 `
 
-const resolvers = {
-  Query: {
-    product(_, args) {
-      return getProductById(args.id)
+  const resolvers = {
+    Query: {
+      product(_, args) {
+        return getProductById(args.id)
+      },
+      products() {
+        return getProducts()
+      }
     },
-    products() {
-      return getProducts()
-    }
-  },
-  Product: {
-    price(product) {
-      return { __typename: 'ProductPrice', id: product.id }
-    },
-    parentCategory({ parentCategory }) {
-      return parentCategory
-        .map((id) => ({ __typename: 'Category', id }))
-    },
-    types(obj) {
-      console.log(obj)
-      return {
-        __typename: 'ProductTypes',
-        parentCategoriesIds: ['0', '1'],
-        values: ['a', 'b']
+    Product: {
+      price(product, args) {
+        return { __typename: 'ProductPrice', id: product.id, type: args.type }
       }
     }
   }
-}
 
 const server = new ApolloServer({
   typeDefs,

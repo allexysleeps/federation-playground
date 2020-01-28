@@ -5,7 +5,7 @@ const gateway = new ApolloGateway({
   serviceList: [
     { name: 'product', url: 'http://localhost:3001/graphql' },
     { name: 'price', url: 'http://localhost:3002/graphql' },
-    { name: 'category', url: 'http://localhost:3003/graphql' }
+    // { name: 'category', url: 'http://localhost:3003/graphql' },
   ],
 });
 
